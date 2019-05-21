@@ -4,6 +4,12 @@ Bootstrap Jenkins with all plugins and proxy configured
 
 ## Build & Run ##
 
+Download the plugins locally
+
+``` sh
+./download-plugins.sh
+```
+
 Build the container image
 
 ``` sh
