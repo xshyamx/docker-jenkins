@@ -19,5 +19,5 @@ docker build -t jenkins-proxy .
 Run the docker container
 
 ```sh
-docker run --name -p 8080:8080 -d jenkins-proxy
+docker run --name jenkins -p 8080:8080 -d jenkins-proxy
 ```
