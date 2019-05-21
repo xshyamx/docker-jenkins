@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# Also look at https://gist.github.com/micw/e80d739c6099078ce0f3
+
 mkdir -p plugins
 while read plugin; do
   if [ ! -e plugins/${plugin}.jpi ]; then
