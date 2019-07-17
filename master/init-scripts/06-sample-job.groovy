@@ -15,16 +15,13 @@ node {
   }
   stage('Build') {
     // Run the maven build
-    withEnv(["MVN_HOME=$mvnHome"]) {
-      configFileProvider([configFile(fileId: 'maven-proxy', variable: 'MAVEN_WITH_PROXY')]) {
-        // use maven-proxy configurations
-        sh '$MVN_HOME/bin/mvn -s $MAVEN_SETTINGS $MAVEN_WITH_PROXY -Dmaven.test.failure.ignore=true clean package'
-      }
-    }
-    // alternatively with pipeline-maven
-    /*
-    withMaven(maven: 'M3', mavenSettingsConfig: 'maven-proxy') {
+    withMaven(maven: 'M3') {
       sh 'mvn -Dmaven.test.failure.ignore=true clean package'
+    }
+    //alternate
+    /*
+    withEnv(["MAVEN_HOME=${mvnHome}"]) {
+      sh '$MAVEN_HOME/bin/mvn -Dmaven.test.failure.ignore=true clean package'
     }
     */
   }
@@ -36,7 +33,32 @@ node {
 '''
 
 def instance = Jenkins.get()
-def sample = instance.createProject(WorkflowJob.class, "sample");
+def sample = instance.createProject(WorkflowJob.class, "sample-maven");
 sample.setDefinition(new CpsFlowDefinition(pipelineGroovy, true));
-instance.getJob('sample').setDescription('A sample pipeline example using maven proxy settings via config file')
+instance.getJob('sample-maven').setDescription('A sample pipeline example using maven')
 sample.save()
+
+def nodePipeline = '''
+node {
+  stage('Prepare') {
+    git 'https://github.com/gustavoapolinario/node-todo-frontend.git'
+    nodejsHome = tool 'node-lts'
+  }
+  stage('Build') {
+    withEnv(["PATH=${nodejsHome}/bin:${env.PATH}"]) {
+      sh 'npm install'
+    }
+  }
+  stage('Test') {
+    withEnv(["PATH=${nodejsHome}/bin:${env.PATH}"]) {
+      sh 'npm test'
+    }
+  }
+}'''
+def nodejs = instance.createProject(WorkflowJob.class, "sample-nodejs");
+nodejs.setDefinition(new CpsFlowDefinition(nodePipeline, true));
+instance.getJob('sample-nodejs').setDescription('A sample pipeline example using nodejs')
+nodejs.save()
+
+instance.queue.schedule(sample WorkflowJob, 0)
+instance.queue.schedule(nodejs as WorkflowJob, 0)
