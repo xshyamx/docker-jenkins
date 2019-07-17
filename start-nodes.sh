@@ -11,7 +11,7 @@ n=$1
 for i in $(seq $n); do
   node_name=$(format "node-%02d" $i)
   ./add-node.sh $node_name
-  docker run --name $node_name -d --env-file ./${$node_name}.env jenkins/node
+  docker run --name $node_name -d --env-file ./${node_name}.env jenkins/node
 done
   
   

@@ -6,7 +6,7 @@ def instance = Jenkins.get()
 
 // Create new user
 println '--> Creating admin user'
-def user = instance.getSecurityRealm().getcreateAccount("jenkins", "jenkins")
+def user = instance.getSecurityRealm().createAccount("jenkins", "jenkins")
 user.save()
 
 def strategy = new FullControlOnceLoggedInAuthorizationStrategy()

@@ -11,8 +11,6 @@ services:
     ports:
       - '8080:8080'
       - '50000:50000'
-    networks:
-      - jenkins
     volumes:
       - jenkins-home-master:/var/jenkins_home
   node:
@@ -21,8 +19,6 @@ services:
       args:
         <<: *proxy
     image: jenkins/node
-    networks:
-      - jenkins
 volumes:
   jenkins-home-master:
     driver: local
