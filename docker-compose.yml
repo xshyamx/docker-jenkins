@@ -1,0 +1,28 @@
+version: '3'
+services:
+  master:
+    build:
+      context: ./master
+      args: &proxy
+        http_proxy: http://10.0.2.2:3128
+        https_proxy: http://10.0.2.2:3128
+        no_proxy: localhost
+    image: jenkins/master
+    ports:
+      - '8080:8080'
+      - '50000:50000'
+    networks:
+      - jenkins
+    volumes:
+      - jenkins-home-master:/var/jenkins_home
+  node:
+    build:
+      context: ./node
+      args:
+        <<: *proxy
+    image: jenkins/node
+    networks:
+      - jenkins
+volumes:
+  jenkins-home-master:
+    driver: local

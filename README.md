@@ -4,6 +4,8 @@ Bootstrap Jenkins with all plugins and proxy configured
 
 ## Build & Run ##
 
+### Jenkins Master ###
+
 From an existing jenkins installation get the shortnames of all installed plugins from the script console (`http://${JENKINS_HOST}/script`)
 
 ```groovy
@@ -13,26 +15,53 @@ Jenkins.instance.pluginManager.plugins.each{
 }
 ```
 
-Download the plugins locally
+Create the list of shortnames in `plugins.txt` and place it in the `./master` folder
+
+Build the container image of the latest LTS version
 
 ``` sh
-./download-plugins.sh
+docker-compose build master
+```
+
+Run the Jenkins master
+
+``` sh
+docker-compose up -d master
+```
+
+### Jenkins Node ###
+
+**NOTE**: Ensure that the master is running before the following steps
+
+```sh
+pushd node
+./get-agent.sh
+popd
 ```
 
 Build the container image
 
 ``` sh
-docker build -t jenkins-proxy .
+docker-compose build node
 ```
 
-Run the docker container
+### Add & Run nodes ###
 
-```sh
-docker run --name jenkins -p 8080:8080 -d jenkins-proxy
+
+Add a few nodes using the `add-node.sh` script
+
+``` sh
+./add-node.sh node-01
 ```
 
-Stop and remove container
+This should create a `node-01.env` file with the required environment variables. Now we can start the jenkins node
 
 ```sh
-docker stop jenkins && docker rm jenkins
+docker run --name node-01 -d --env-file ./node-01.env jenkins/node
+```
+
+**NOTE**: To start a series of nodes use the `start-nodes.sh` script eg.
+
+```sh
+./start-nodes.sh 3
 ```

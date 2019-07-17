@@ -1,3 +1,6 @@
 .*
 !.gitignore
-/plugins
+/master/plugins
+*.env
+*.json
+*.jnlp
