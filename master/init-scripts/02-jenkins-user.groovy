@@ -1,11 +1,11 @@
 import jenkins.model.*
 import hudson.security.*
-import jenkins.install.InstallState
 
 def instance = Jenkins.get()
 
 // Create new user
 println '--> Creating admin user'
+instance.setSecurityRealm(new HudsonPrivateSecurityRealm(false))
 def user = instance.getSecurityRealm().createAccount("jenkins", "jenkins")
 user.save()
 

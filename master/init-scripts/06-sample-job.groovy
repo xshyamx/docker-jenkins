@@ -21,6 +21,12 @@ node {
         sh '$MVN_HOME/bin/mvn -s $MAVEN_SETTINGS $MAVEN_WITH_PROXY -Dmaven.test.failure.ignore=true clean package'
       }
     }
+    // alternatively with pipeline-maven
+    /*
+    withMaven(maven: 'M3', mavenSettingsConfig: 'maven-proxy') {
+      sh 'mvn -Dmaven.test.failure.ignore=true clean package'
+    }
+    */
   }
   stage('Results') {
     junit '**/target/surefire-reports/TEST-*.xml'
@@ -30,6 +36,7 @@ node {
 '''
 
 def instance = Jenkins.get()
-def simple = instance.createProject(WorkflowJob.class, "simple");
-simple.setDefinition(new CpsFlowDefinition(pipelineGroovy, true));
-simple.save()
+def sample = instance.createProject(WorkflowJob.class, "sample");
+sample.setDefinition(new CpsFlowDefinition(pipelineGroovy, true));
+instance.getJob('sample').setDescription('A sample pipeline example using maven proxy settings via config file')
+sample.save()
