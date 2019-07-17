@@ -13,5 +13,3 @@ for i in $(seq $n); do
   ./add-node.sh $node_name
   docker run --name $node_name -d --env-file ./${node_name}.env jenkins/node
 done
-  
-  

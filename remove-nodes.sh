@@ -49,3 +49,5 @@ EOF
   fi
 done
 
+# cleanup
+rm -f crumb.json
