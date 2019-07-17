@@ -13,10 +13,8 @@ def strategy = new FullControlOnceLoggedInAuthorizationStrategy()
 strategy.setAllowAnonymousRead(false)
 instance.setAuthorizationStrategy(strategy)
 
-// rest install state
-if (!instance.installState.isSetupComplete()) {
-  println '--> Neutering SetupWizard'
-  InstallState.INITIAL_SETUP_COMPLETED.initializeState()
-}
+def jlc = JenkinsLocationConfiguration.get()
+jlc.setUrl('http://192.168.99.100:8080/')
+jlc.save()
 
 instance.save()

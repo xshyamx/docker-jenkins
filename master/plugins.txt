@@ -12,6 +12,7 @@ display-url-api
 docker-commons
 docker-workflow
 durable-task
+git
 git-client
 git-server
 handlebars
@@ -28,6 +29,7 @@ nodejs
 pipeline-build-step
 pipeline-graph-analysis
 pipeline-input-step
+pipeline-maven
 pipeline-milestone-step
 pipeline-model-api
 pipeline-model-declarative-agent
