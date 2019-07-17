@@ -60,8 +60,14 @@ This should create a `node-01.env` file with the required environment variables.
 docker run --name node-01 -d --env-file ./node-01.env jenkins/node
 ```
 
-**NOTE**: To start a series of nodes use the `start-nodes.sh` script eg.
+To start a series of nodes use the `start-nodes.sh` script eg.
 
 ```sh
 ./start-nodes.sh 3
+```
+
+To clean up the nodes use the `remove-nodes.sh`. Ensure that this run from the same directory from where `start-nodes.sh` was run as it relies on the presence of the `.env` files created by `start-nodes.sh`
+
+```sh
+./remove-nodes.sh
 ```
