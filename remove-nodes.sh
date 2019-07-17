@@ -40,12 +40,13 @@ EOF
   if $JURL \
        -XPOST \
        -o /dev/null \
+       --fail \
        -H "Jenkins-Crumb: $CRUMB" \
        -H "Accept: application/json" \
        -d "script=$SCRIPT" \
        $JENKINS_URL/script
   then
-    rm -f $node
+    rm -f $node_env
   fi
 done
 

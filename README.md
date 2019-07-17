@@ -1,6 +1,6 @@
 # Jenkins #
 
-Bootstrap Jenkins with all plugins and proxy configured
+Bootstrap Jenkins with all plugins and proxy configured. Assumption is that docker is running via docker-machine whose host-only-ip is `192.168.99.100` and the proxy is running on the host in port 3128 so, the proxy configuration will be `http://10.0.2.2:3128`
 
 ## Build & Run ##
 
@@ -70,4 +70,12 @@ To clean up the nodes use the `remove-nodes.sh`. Ensure that this run from the s
 
 ```sh
 ./remove-nodes.sh
+```
+
+### Cleanup ###
+
+Ensure that the master node and the associated volume is deleted
+
+```sh
+docker-compose down -v
 ```
