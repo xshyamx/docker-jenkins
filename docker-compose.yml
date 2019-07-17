@@ -8,6 +8,8 @@ services:
         https_proxy: http://10.0.2.2:3128
         no_proxy: localhost
     image: jenkins/master
+    environment:
+      JAVA_OPTS: '-Dhttp.proxyHost=10.0.2.2 -Dhttp.proxyPort=3128 -Dhttps.proxyHost=10.0.2.2 -Dhttps.proxyPort=3128'
     ports:
       - '8080:8080'
       - '50000:50000'
