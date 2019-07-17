@@ -59,10 +59,6 @@ cat <<EOF > $NODE_NAME.env
 JENKINS_URL=${JENKINS_URL}
 NODE_NAME=${NODE_NAME}
 SECRET=${SECRET}
-http_proxy=http://10.0.2.2:3128
-https_proxy=http://10.0.2.2:3128
-no_proxy=localhost
-JAVA_OPTS=-Dhttp.proxyHost=10.0.2.2 -Dhttp.proxyPort=3128 -Dhttps.proxyHost=10.0.2.2 -Dhttps.proxyPort=3128
 EOF
 
 # cleanup
