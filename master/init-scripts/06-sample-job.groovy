@@ -2,7 +2,10 @@ import jenkins.model.*
 import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition;
 import org.jenkinsci.plugins.workflow.job.WorkflowJob;
 
-def pipelineGroovy = '''
+def mavenJob = [
+  name: 'sample-maven',
+  description: 'A sample maven pipeline example using maven proxy settings',
+  script: '''
 node {
   def mvnHome
   stage('Preparation') { // for display purposes
@@ -15,13 +18,15 @@ node {
   }
   stage('Build') {
     // Run the maven build
-    withMaven(maven: 'M3') {
+    withMaven(maven: 'M3', mavenSettingsConfig: 'maven-proxy') {
       sh 'mvn -Dmaven.test.failure.ignore=true clean package'
     }
     //alternate
     /*
-    withEnv(["MAVEN_HOME=${mvnHome}"]) {
-      sh '$MAVEN_HOME/bin/mvn -Dmaven.test.failure.ignore=true clean package'
+    withEnv(["MVN_HOME=$mvnHome"]) {
+      configFileProvider([configFile(fileId: 'maven-proxy', variable: 'MAVEN_WITH_PROXY')]) {
+      // use maven-proxy configurations
+      sh '$MVN_HOME/bin/mvn -s $MAVEN_SETTINGS $MAVEN_WITH_PROXY -Dmaven.test.failure.ignore=true clean package'
     }
     */
   }
@@ -31,14 +36,11 @@ node {
   }
 }
 '''
-
-def instance = Jenkins.get()
-def sample = instance.createProject(WorkflowJob.class, "sample-maven");
-sample.setDefinition(new CpsFlowDefinition(pipelineGroovy, true));
-instance.getJob('sample-maven').setDescription('A sample pipeline example using maven')
-sample.save()
-
-def nodePipeline = '''
+]
+def nodejsJob = [
+  name: 'sample-nodejs',
+  description: 'A sample pipeline example using nodejs',
+  script: '''
 node {
   stage('Prepare') {
     git 'https://github.com/gustavoapolinario/node-todo-frontend.git'
@@ -55,10 +57,15 @@ node {
     }
   }
 }'''
-def nodejs = instance.createProject(WorkflowJob.class, "sample-nodejs");
-nodejs.setDefinition(new CpsFlowDefinition(nodePipeline, true));
-instance.getJob('sample-nodejs').setDescription('A sample pipeline example using nodejs')
-nodejs.save()
+]
 
-instance.queue.schedule(sample WorkflowJob, 0)
-instance.queue.schedule(nodejs as WorkflowJob, 0)
+def instance = Jenkins.get()
+
+[mavenJob, nodejsJob].each {
+  def job = instance.createProject(WorkflowJob.class, it.name);
+  job.setDefinition(new CpsFlowDefinition(it.script, true))
+  instance.getJob(it.name).setDescription(it.description)
+  job.save()
+  // queue a job
+  instance.queue.schedule(job, 0)
+}

@@ -45,6 +45,7 @@ script-security
 ssh-credentials
 structs
 token-macro
+warnings-ng
 workflow-aggregator
 workflow-api
 workflow-basic-steps
