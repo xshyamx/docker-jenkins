@@ -53,7 +53,7 @@ $JURL -o ${NODE_NAME}.jnlp \
       $JENKINS_URL/computer/$NODE_NAME/slave-agent.jnlp
 
 # extract the secret
-SECRET=$(awk -F '<argument>' '{print $2}' ${NODE_NAME}.jnlp | sed 's/<\/argument>//')
+SECRET=$(awk -F '<argument>' '/<argument>/ {print $2}' ${NODE_NAME}.jnlp | sed 's/<\/argument>//')
 
 cat <<EOF > $NODE_NAME.env
 JENKINS_URL=${JENKINS_URL}
