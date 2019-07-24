@@ -8,13 +8,13 @@ EOF
 fi
 n=$1
 
+JENKINS_URL=http://192.168.99.100:8080
 JENKINS_USER=jenkins
 JENKINS_PASSWORD=jenkins
-JENKINS_HOME=/var/jenkins_home
 
 for i in $(seq $n); do
   node_name=$(printf "node-%02d" $i)
-  cat <<EOF > $NODE_NAME.env
+  cat <<EOF > ${node_name}.env
 JENKINS_URL=${JENKINS_URL}
 JENKINS_USER=${JENKINS_USER}
 JENKINS_PASSWORD=${JENKINS_PASSWORD}

@@ -20,7 +20,12 @@ RUN mkdir -p $JENKINS_HOME /usr/share/jenkins \
 
 USER jenkins
 
-ADD https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/${SWARM_PLUGIN_VERSION}/swarm-client-${SWARM_PLUGIN_VERSION}.jar /usr/share/jenkins/swarm-client.jar
+#ADD https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/${SWARM_PLUGIN_VERSION}/swarm-client-${SWARM_PLUGIN_VERSION}.jar /usr/share/jenkins/swarm-client.jar
+ADD swarm-client.jar.sha256 /usr/share/jenkins/swarm-client.jar.sha256
+
+RUN curl -o /usr/share/jenkins/swarm-client.jar \
+        -L https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/${SWARM_PLUGIN_VERSION}/swarm-client-${SWARM_PLUGIN_VERSION}.jar \
+    && sha256sum -c /usr/share/jenkins/swarm-client.jar.sha256
 
 WORKDIR $JENKINS_HOME
 
