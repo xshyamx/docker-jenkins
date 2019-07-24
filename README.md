@@ -31,13 +31,7 @@ docker-compose up -d master
 
 ### Jenkins Node ###
 
-**NOTE**: Ensure that the master is running before the following steps
-
-```sh
-pushd node
-./get-agent.sh
-popd
-```
+Jenkins nodes are created using the [Swarm Plugin](https://wiki.jenkins.io/display/JENKINS/Swarm+Plugin) so, ensure that the plugins.txt contains it.
 
 Build the container image
 
@@ -46,19 +40,6 @@ docker-compose build node
 ```
 
 ### Add & Run nodes ###
-
-
-Add a few nodes using the `add-node.sh` script
-
-``` sh
-./add-node.sh node-01
-```
-
-This should create a `node-01.env` file with the required environment variables. Now we can start the jenkins node
-
-```sh
-docker run --name node-01 -d --env-file ./node-01.env jenkins/node
-```
 
 To start a series of nodes use the `start-nodes.sh` script eg.
 
