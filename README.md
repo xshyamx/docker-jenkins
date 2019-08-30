@@ -17,7 +17,7 @@ Jenkins.instance.pluginManager.plugins.each{
 
 Create the list of shortnames in `plugins.txt` and place it in the `./master` folder
 
-Build the container image of the latest LTS version
+Build the container image of the latest [LTS version][jenkins-lts]
 
 ``` sh
 docker-compose build master
@@ -60,3 +60,5 @@ Ensure that the master node and the associated volume is deleted
 ```sh
 docker-compose down -v
 ```
+
+[jenkins-lts]: https://hub.docker.com/_/jenkins
